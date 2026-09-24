@@ -1,0 +1,32 @@
+services:
+  # SkillGap Web Application (Streamlit)
+  - type: web
+    name: skillgap-web
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "streamlit run app.py --server.port=$PORT --server.address=0.0.0.0 --server.headless=true"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+
+  # Optional: SkillGap FastAPI AI Processing Backend
+  - type: web
+    name: skillgap-ai-api
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn fastapi_server:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
